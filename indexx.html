@@ -1,0 +1,1180 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A Birthday Surprise 💗</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --pink: #ffb6d0;
+    --dark-pink: #d14f81;
+    --light-pink: #ffe6ef;
+    --white: #fffafd;
+    --text: #a63d64;
+}
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #ffe0ec, #fff7fa, #ffd6e7);
+    color: var(--text);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+button {
+    border: none;
+    padding: 14px 28px;
+    margin-top: 25px;
+    border-radius: 40px;
+    background: white;
+    color: var(--dark-pink);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 22px rgba(231, 162, 188, 0.5);
+    transition: transform 0.3s, background 0.3s;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: #fff0f6;
+}
+
+button:focus-visible,
+.envelope-card:focus-visible {
+    outline: 3px solid var(--dark-pink);
+    outline-offset: 5px;
+}
+
+h1 {
+    font-size: clamp(2rem, 6vw, 3.7rem);
+    margin-bottom: 18px;
+}
+
+p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.page {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    padding: 25px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    animation: fadeIn 0.8s ease;
+}
+
+.page.active {
+    display: flex;
+}
+
+.page > * {
+    position: relative;
+    z-index: 1;
+}
+
+.glow {
+    animation: glow 2s infinite alternate;
+}
+
+.bow {
+    font-size: 5rem;
+    animation: bounce 1.5s infinite;
+}
+
+.gift {
+    font-size: 6rem;
+    animation: bounce 1s infinite;
+}
+
+.small-text {
+    margin-top: 22px;
+    font-size: 0.9rem;
+}
+
+/* FLOATING HEARTS */
+
+.heart {
+    position: fixed;
+    bottom: -50px;
+    pointer-events: none;
+    animation: floatUp linear forwards;
+    z-index: 0;
+}
+
+/* BIRTHDAY CAKE */
+
+.cake {
+    position: relative;
+    width: 190px;
+    height: 130px;
+    margin-top: 55px;
+    animation: cakeAppear 1s ease;
+}
+
+.cake-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 190px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff0f5;
+    border: 3px solid #e9a2bd;
+    z-index: 2;
+}
+
+.cake-body {
+    position: absolute;
+    top: 20px;
+    width: 190px;
+    height: 90px;
+    border-radius: 0 0 18px 18px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffb6ce,
+        #ffb6ce 24px,
+        #fff0f5 24px,
+        #fff0f5 48px
+    );
+    border: 3px solid #e9a2bd;
+}
+
+.icing {
+    position: absolute;
+    top: 27px;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    background: white;
+    border-radius: 0 0 50% 50%;
+    z-index: 3;
+}
+
+.candle {
+    position: absolute;
+    top: -43px;
+    left: 87px;
+    width: 16px;
+    height: 45px;
+    background: repeating-linear-gradient(
+        45deg,
+        white,
+        white 5px,
+        #ff8db3 5px,
+        #ff8db3 10px
+    );
+    border-radius: 5px 5px 0 0;
+    z-index: 4;
+}
+
+.flame {
+    position: absolute;
+    top: -27px;
+    left: 3px;
+    width: 10px;
+    height: 19px;
+    background: #ffad33;
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 0 0 18px #ff9d00;
+    animation: flicker 0.4s infinite alternate;
+}
+
+.flame.out {
+    display: none;
+}
+
+.smoke {
+    position: absolute;
+    top: -28px;
+    left: 4px;
+    font-size: 23px;
+    opacity: 0;
+}
+
+.smoke.show {
+    animation: smokeUp 1.5s forwards;
+}
+
+.cake-hint {
+    margin-top: 40px;
+}
+
+/* LETTER CARDS */
+
+.letter {
+    width: min(550px, 95%);
+    padding: 30px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 8px 35px rgba(201, 92, 135, 0.15);
+    border: 1px solid white;
+}
+
+.letter p {
+    margin-top: 15px;
+}
+
+.signature {
+    font-weight: bold;
+    margin-top: 25px;
+    font-size: 1.2rem;
+}
+
+/* ENVELOPES PAGE */
+
+.envelope-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 25px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 10px;
+}
+
+.envelope-card {
+    width: 260px;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 22px;
+    transition: transform 0.35s, background 0.35s;
+}
+
+.envelope-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.envelope-card h3 {
+    font-size: 1.05rem;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.envelope-card p {
+    font-size: 0.9rem;
+}
+
+.envelope {
+    position: relative;
+    width: 200px;
+    height: 135px;
+    margin: 0 auto;
+    perspective: 800px;
+    filter: drop-shadow(0 8px 12px rgba(191, 93, 133, 0.2));
+    transition: filter 0.3s;
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    background: #ffc3d9;
+    border: 2px solid #ed9fbc;
+    border-radius: 8px;
+}
+
+.letter-preview {
+    position: absolute;
+    width: 175px;
+    height: 120px;
+    background: #fffafd;
+    left: 12px;
+    top: 5px;
+    border-radius: 5px;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.7s ease;
+}
+
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    background: #ffb4ce;
+    clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+    border-radius: 7px;
+}
+
+.envelope-flap {
+    position: absolute;
+    inset: 0;
+    background: #ffe1ec;
+    clip-path: polygon(0 0, 100% 0, 50% 60%);
+    transform-origin: top;
+    transition: transform 0.65s ease;
+    z-index: 3;
+}
+
+.envelope-heart {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    font-size: 2.3rem;
+    color: #d84e83;
+    z-index: 4;
+    transition: opacity 0.3s;
+}
+
+.envelope-card:hover .envelope {
+    filter: drop-shadow(0 0 15px #ff9fc3);
+}
+
+.envelope.opened .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope.opened .letter-preview {
+    transform: translateY(-70px);
+    z-index: 2;
+}
+
+.envelope.opened .envelope-heart {
+    opacity: 0;
+}
+
+/* OPENED LETTER */
+
+.opened-letter {
+    width: min(540px, 94vw);
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 35px 30px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, #fffafd, #ffeaf2);
+    border: 2px solid white;
+    box-shadow: 0 10px 45px rgba(209, 79, 129, 0.2);
+    animation: letterAppear 0.8s ease both;
+}
+
+.letter-decoration {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.opened-letter h1 {
+    font-size: 2rem;
+    line-height: 1.3;
+}
+
+.letter-divider {
+    color: #e48caf;
+    margin: 18px 0;
+}
+
+#letterMessage {
+    color: #98415f;
+    font-size: 1.02rem;
+    line-height: 2;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.letter-signature {
+    margin-top: 25px;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #d14f81;
+}
+
+/* CONFETTI */
+
+#confetti {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    to {
+        transform: translateY(-115vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 8px white;
+    }
+    to {
+        text-shadow: 0 0 25px #ff7da9;
+    }
+}
+
+@keyframes flicker {
+    from {
+        transform: rotate(-5deg) scale(1);
+    }
+    to {
+        transform: rotate(5deg) scale(1.12);
+    }
+}
+
+@keyframes smokeUp {
+    0% {
+        opacity: 0.8;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-55px) scale(1.8);
+    }
+}
+
+@keyframes cakeAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes letterAppear {
+    from {
+        opacity: 0;
+        transform: translateY(45px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+    body {
+        overflow: hidden;
+    }
+
+    .page {
+        padding: 25px 15px;
+    }
+
+    .envelope-container {
+        gap: 12px;
+        padding-bottom: 10px;
+    }
+
+    .envelope-card {
+        width: min(100%, 300px);
+        padding: 8px;
+    }
+
+    .envelope-card h3 {
+        margin-top: 10px;
+    }
+
+    .opened-letter {
+        padding: 25px 20px;
+    }
+
+    .letter {
+        padding: 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- PAGE 1: WELCOME -->
+
+<section class="page active" id="page1">
+
+    <div class="bow">🎀</div>
+
+    <h1 class="glow">Hey, Birthday Girl! 💗</h1>
+
+    <p>Someone has a little surprise waiting for you...</p>
+
+    <button onclick="nextPage(2)">
+        Tap Here ✨
+    </button>
+
+    <p class="small-text">Made with a little extra love ♡</p>
+
+</section>
+
+
+<!-- PAGE 2: SURPRISE -->
+
+<section class="page" id="page2">
+
+    <div class="gift">🎁</div>
+
+    <h1>A Little Surprise! 💕</h1>
+
+    <p>Today is all about you, your smile, and your happiness.</p>
+
+    <p>But wait... there's one more thing! 🎀</p>
+
+    <button onclick="nextPage(3)">
+        Let's See 🎂
+    </button>
+
+</section>
+
+
+<!-- PAGE 3: CAKE -->
+
+<section class="page" id="page3">
+
+    <h1>Your Birthday Cake 🎂</h1>
+
+    <p>Make a wish and blow out your candle! ✨</p>
+
+    <div class="cake">
+
+        <div class="candle">
+
+            <div class="flame" id="flame"></div>
+
+            <div class="smoke" id="smoke">〰</div>
+
+        </div>
+
+        <div class="cake-top"></div>
+
+        <div class="cake-body"></div>
+
+        <div class="icing"></div>
+
+    </div>
+
+    <p class="cake-hint" id="cakeHint">
+        Close your eyes, make a wish, and tap the button! 🕯️
+    </p>
+
+    <button id="blowButton" onclick="blowCandle()">
+        Blow Out Candle 💨
+    </button>
+
+</section>
+
+
+<!-- PAGE 4: BIRTHDAY WISH -->
+
+<section class="page" id="page4">
+
+    <div style="font-size:5rem;">🎉🎂🎉</div>
+
+    <h1 class="glow">Happy Birthday! 💗</h1>
+
+    <p>May your life always be filled with love, laughter,</p>
+
+    <p>beautiful memories, and countless reasons to smile. 🌸</p>
+
+    <p>You deserve all the happiness in the world! 💕</p>
+
+    <button onclick="nextPage(5)">
+        One Special Message 💌
+    </button>
+
+</section>
+
+
+<!-- PAGE 5: SPECIAL MESSAGE -->
+
+<section class="page" id="page5">
+
+    <div class="letter">
+
+        <div style="font-size:3rem;">💌</div>
+
+        <h1 style="font-size:2.2rem;">A Little Message for You</h1>
+
+        <p>
+            On your special day, I just want you to know
+            that you are someone truly special.
+        </p>
+
+        <p>
+            May every dream you carry in your heart come true.
+            May you find happiness in the little things,
+            strength in difficult moments, and love in every
+            beautiful chapter of your life.
+        </p>
+
+        <p>
+            Keep smiling, keep shining, and never forget
+            how much you deserve to be happy. 💗
+        </p>
+
+        <p class="signature">
+            Happy Birthday, Once Again! 🎀<br>
+            With lots of love, ♡
+        </p>
+
+    </div>
+
+    <button onclick="nextPage(6)">
+        Open My Little Letters 💌
+    </button>
+
+</section>
+
+
+<!-- PAGE 6: THREE ENVELOPES -->
+
+<section class="page" id="page6">
+
+    <h1 class="glow" style="font-size:2.6rem;">
+        Letters From My Heart 💌
+    </h1>
+
+    <p style="margin-bottom:25px;">
+        Three little letters, each holding something special for you. ♡
+    </p>
+
+    <div class="envelope-container">
+
+        <!-- ENVELOPE 1 -->
+
+        <div class="envelope-card"
+             role="button"
+             tabindex="0"
+             onclick="openLetter(0)"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLetter(0)}">
+
+            <div class="envelope" id="env0">
+
+                <div class="envelope-back"></div>
+
+                <div class="letter-preview">💌</div>
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="envelope-heart">♡</div>
+
+            </div>
+
+            <h3>What I Like About You</h3>
+
+            <p>A little confession 💗</p>
+
+        </div>
+
+
+        <!-- ENVELOPE 2 -->
+
+        <div class="envelope-card"
+             role="button"
+             tabindex="0"
+             onclick="openLetter(1)"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLetter(1)}">
+
+            <div class="envelope" id="env1">
+
+                <div class="envelope-back"></div>
+
+                <div class="letter-preview">💌</div>
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="envelope-heart">♡</div>
+
+            </div>
+
+            <h3>If Someone Asked Me to Describe You</h3>
+
+            <p>Through my eyes 🦋</p>
+
+        </div>
+
+
+        <!-- ENVELOPE 3 -->
+
+        <div class="envelope-card"
+             role="button"
+             tabindex="0"
+             onclick="openLetter(2)"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLetter(2)}">
+
+            <div class="envelope" id="env2">
+
+                <div class="envelope-back"></div>
+
+                <div class="letter-preview">💌</div>
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-flap"></div>
+
+                <div class="envelope-heart">♡</div>
+
+            </div>
+
+            <h3>My Favourite Memory of Us</h3>
+
+            <p>A moment I'll keep forever 🌸</p>
+
+        </div>
+
+    </div>
+
+    <button onclick="nextPage(8)">
+        There's Still More to My Heart 💗
+    </button>
+
+</section>
+
+
+<!-- PAGE 7: INDIVIDUAL LETTER -->
+
+<section class="page" id="page7">
+
+    <div class="opened-letter" id="openedLetter">
+
+        <div class="letter-decoration">💌</div>
+
+        <h1 id="letterTitle">A Letter for You</h1>
+
+        <div class="letter-divider">♡ ───── ✧ ───── ♡</div>
+
+        <p id="letterMessage"></p>
+
+        <div class="letter-signature">
+            Written with love ♡
+        </div>
+
+    </div>
+
+    <button onclick="closeLetter()">
+        Back to Envelopes 💌
+    </button>
+
+</section>
+
+
+<!-- PAGE 8: FINAL SURPRISE -->
+
+<section class="page" id="page8">
+
+    <div style="font-size:5rem; animation:bounce 1.5s infinite;">
+        💗
+    </div>
+
+    <h1 class="glow">And One Last Thing...</h1>
+
+    <div class="letter">
+
+        <p>
+            If I could give you one thing in life,
+            it would be the ability to see yourself
+            through my eyes.
+        </p>
+
+        <p>
+            Then you'd understand why you're so special,
+            why your smile matters, and why some people
+            make ordinary moments feel extraordinary. ✨
+        </p>
+
+        <p>
+            Happy Birthday, you beautiful soul. 🎀
+        </p>
+
+    </div>
+
+    <button onclick="restart()">
+        Relive the Magic ↻
+    </button>
+
+</section>
+
+
+<script>
+
+/* PAGE NAVIGATION */
+
+function nextPage(number) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById("page" + number).classList.add("active");
+
+    if (number === 4) {
+        startConfetti();
+    }
+
+}
+
+
+/* BIRTHDAY CANDLE */
+
+let candleBlown = false;
+
+function blowCandle() {
+
+    if (candleBlown) return;
+
+    candleBlown = true;
+
+    document.getElementById("flame").classList.add("out");
+
+    document.getElementById("smoke").classList.add("show");
+
+    document.getElementById("cakeHint").textContent =
+        "Your wish is on its way to the universe! ✨💗";
+
+    document.getElementById("blowButton").style.display = "none";
+
+    setTimeout(() => {
+        nextPage(4);
+    }, 2200);
+
+}
+
+
+/* FLOATING HEARTS */
+
+function createHeart() {
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+
+    const symbols = ["♡", "💗", "💕", "🌸", "✨"];
+
+    heart.textContent =
+        symbols[Math.floor(Math.random() * symbols.length)];
+
+    heart.style.left = Math.random() * 100 + "vw";
+
+    heart.style.fontSize = (15 + Math.random() * 25) + "px";
+
+    heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 10000);
+
+}
+
+setInterval(createHeart, 450);
+
+
+/* CONFETTI ANIMATION */
+
+const canvas = document.getElementById("confetti");
+
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resizeCanvas() {
+
+    canvas.width = window.innerWidth;
+
+    canvas.height = window.innerHeight;
+
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+
+
+function startConfetti() {
+
+    particles = [];
+
+    for (let i = 0; i < 180; i++) {
+
+        particles.push({
+
+            x: Math.random() * canvas.width,
+
+            y: -Math.random() * canvas.height,
+
+            size: 4 + Math.random() * 6,
+
+            speed: 2 + Math.random() * 4,
+
+            drift: Math.random() * 2 - 1,
+
+            rotation: Math.random() * 360,
+
+            color: [
+                "#ff83ad",
+                "#ffffff",
+                "#f5c5d6",
+                "#ffcc66",
+                "#d9a7ff"
+            ][Math.floor(Math.random() * 5)]
+
+        });
+
+    }
+
+    requestAnimationFrame(drawConfetti);
+
+}
+
+
+function drawConfetti() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+
+        p.y += p.speed;
+
+        p.x += p.drift;
+
+        p.rotation += 3;
+
+        ctx.save();
+
+        ctx.translate(p.x, p.y);
+
+        ctx.rotate(p.rotation * Math.PI / 180);
+
+        ctx.fillStyle = p.color;
+
+        ctx.fillRect(
+            -p.size / 2,
+            -p.size / 2,
+            p.size,
+            p.size
+        );
+
+        ctx.restore();
+
+    });
+
+    particles = particles.filter(
+        p => p.y < canvas.height + 20
+    );
+
+    if (particles.length > 0) {
+
+        requestAnimationFrame(drawConfetti);
+
+    } else {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    }
+
+}
+
+
+/* PERSONALIZED ENVELOPE LETTERS */
+
+const birthdayLetters = [
+
+    {
+        title: "What I Like About You 💗",
+
+        message: `Honestly, it's the little things about you that make you special.
+
+It's your smile, your way of talking, your little expressions, and the way you can make an ordinary moment feel different.
+
+I like how you can be yourself without even trying to impress anyone.
+
+And perhaps the sweetest thing is that you might not even realize how special you are.
+
+If I had to choose one thing I like most about you, it would be the way you make simple moments memorable. ♡`
+    },
+
+
+    {
+        title: "If Someone Asked Me to Describe You 🦋",
+
+        message: `If someone asked me to describe you, I wouldn't just talk about your appearance.
+
+I'd describe you as someone with a beautiful presence, someone who can leave a little happiness behind even after an ordinary conversation.
+
+Someone with their own personality, their own little habits, and a charm that is difficult to put into words.
+
+I'd say that you're the kind of person who deserves to be appreciated not just on birthdays, but on ordinary days too.
+
+Because some people are simply unforgettable in their own way. ✨`
+    },
+
+
+    {
+        title: "My Favourite Memory of Us 🌸",
+
+        message: `Some moments might seem ordinary when they happen, but later they become the memories we smile about.
+
+For me, the best part isn't always what we did. It's the happiness, the laughter, and the feeling of being present in that moment.
+
+I hope we keep making more memories like those: little adventures, random conversations, silly jokes, and moments we'll remember long after today.
+
+And if someone asked me what I'd like more of, my answer would be simple:
+
+More beautiful moments, more laughter, and more memories worth keeping. 💗`
+    }
+
+];
+
+
+/* OPEN A SELECTED ENVELOPE */
+
+let letterOpening = false;
+
+function openLetter(index) {
+
+    if (letterOpening) return;
+
+    letterOpening = true;
+
+    const envelope = document.getElementById("env" + index);
+
+    envelope.classList.add("opened");
+
+    setTimeout(() => {
+
+        const letter = birthdayLetters[index];
+
+        document.getElementById("letterTitle").textContent =
+            letter.title;
+
+        document.getElementById("letterMessage").textContent =
+            letter.message;
+
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.remove("active");
+        });
+
+        const openedLetter = document.getElementById("openedLetter");
+
+        openedLetter.style.animation = "none";
+
+        void openedLetter.offsetWidth;
+
+        openedLetter.style.animation = "letterAppear 0.8s ease both";
+
+        document.getElementById("page7").classList.add("active");
+
+        letterOpening = false;
+
+    }, 500);
+
+}
+
+
+/* CLOSE LETTER AND RETURN TO ENVELOPES */
+
+function closeLetter() {
+
+    document.getElementById("page7").classList.remove("active");
+
+    document.querySelectorAll(".envelope").forEach(envelope => {
+        envelope.classList.remove("opened");
+    });
+
+    document.getElementById("page6").classList.add("active");
+
+}
+
+
+/* RESTART ENTIRE EXPERIENCE */
+
+function restart() {
+
+    candleBlown = false;
+
+    letterOpening = false;
+
+    particles = [];
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    document.getElementById("flame").classList.remove("out");
+
+    document.getElementById("smoke").classList.remove("show");
+
+    document.getElementById("cakeHint").textContent =
+        "Close your eyes, make a wish, and tap the button! 🕯️";
+
+    document.getElementById("blowButton").style.display =
+        "inline-block";
+
+    document.querySelectorAll(".envelope").forEach(envelope => {
+        envelope.classList.remove("opened");
+    });
+
+    nextPage(1);
+
+}
+
+</script>
+
+</body>
+</html>
+```
